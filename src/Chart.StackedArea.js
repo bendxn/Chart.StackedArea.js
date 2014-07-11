@@ -250,37 +250,43 @@
 			this.scale.update(newScaleProps);
 		},
 		draw : function(ease){
+			var self = this;
 			var easingDecimal = ease || 1;
-			this.clear();
+			self.clear();
 
-			var ctx = this.chart.ctx;
+			var ctx = self.chart.ctx;
 
-			this.scale.draw(easingDecimal);
+			self.scale.draw(easingDecimal);
+
 			var yValues = [];
-			helpers.each(this.datasets, function(dataset) {
-				helpers.each(dataset.points, function(point, index) {
-					if(!yValues[index])
-						yValues[index] = 0;
-					yValues[index] += point.value;
+			for (var i = 0; i < self.datasets.length; i++)
+				yValues[i] = [];
+			//Calculate y values in reverse so that we draw the fills from top to bottom over one another
+			for (var datasetIndex = self.datasets.length - 1; datasetIndex >= 0; datasetIndex--) {
+				var dataset = self.datasets[datasetIndex];
+				helpers.each(dataset.points, function(point, pointIndex) {
+					yValues[datasetIndex][pointIndex] = point.value;
+					if (datasetIndex < self.datasets.length - 1)
+						yValues[datasetIndex][pointIndex] += yValues[datasetIndex + 1][pointIndex];
 				});
-			});
-			helpers.each(this.datasets,function(dataset){
+			}
+
+			helpers.each(self.datasets,function(dataset, datasetIndex){
 
 				//Transition each point first so that the line and point drawing isn't out of sync
 				//We can use this extra loop to calculate the control points of this dataset also in this loop
 
-				helpers.each(dataset.points,function(point,index){
+				helpers.each(dataset.points,function(point, pointIndex){
 					point.transition({
-						y : this.scale.calculateY(yValues[index]),
-						x : this.scale.calculateX(index)
+						y : self.scale.calculateY(yValues[datasetIndex][pointIndex]),
+						x : self.scale.calculateX(pointIndex)
 					}, easingDecimal);
-					yValues[index] -= point.value;
-				},this);
+				},self);
 
 
 				// Control points need to be calculated in a seperate loop, because we need to know the current x/y of the point
 				// This would cause issues when there is no animation, because the y of the next point would be 0, so beziers would be skewed
-				if (this.options.bezierCurve){
+				if (self.options.bezierCurve){
 					helpers.each(dataset.points,function(point,index){
 						//If we're at the start or end, we don't have a previous/next point
 						//By setting the tension to 0 here, the curve will transition to straight at the end
@@ -291,19 +297,19 @@
 							point.controlPoints = helpers.splineCurve(dataset.points[index-1],point,point,0);
 						}
 						else{
-							point.controlPoints = helpers.splineCurve(dataset.points[index-1],point,dataset.points[index+1],this.options.bezierCurveTension);
+							point.controlPoints = helpers.splineCurve(dataset.points[index-1],point,dataset.points[index+1],self.options.bezierCurveTension);
 						}
-					},this);
+					},self);
 				}
 
 
 				//Draw the line between all the points
-				ctx.lineWidth = this.options.datasetStrokeWidth;
+				ctx.lineWidth = self.options.datasetStrokeWidth;
 				ctx.strokeStyle = dataset.strokeColor;
 				ctx.beginPath();
 				helpers.each(dataset.points,function(point,index){
 					if (index>0){
-						if(this.options.bezierCurve){
+						if(self.options.bezierCurve){
 							ctx.bezierCurveTo(
 								dataset.points[index-1].controlPoints.outer.x,
 								dataset.points[index-1].controlPoints.outer.y,
@@ -321,12 +327,12 @@
 					else{
 						ctx.moveTo(point.x,point.y);
 					}
-				},this);
+				},self);
 				ctx.stroke();
 
 				//Round off the line by going to the base of the chart, back to the start, then fill.
-				ctx.lineTo(dataset.points[dataset.points.length-1].x, this.scale.endPoint);
-				ctx.lineTo(this.scale.calculateX(0), this.scale.endPoint);
+				ctx.lineTo(dataset.points[dataset.points.length-1].x, self.scale.endPoint);
+				ctx.lineTo(self.scale.calculateX(0), self.scale.endPoint);
 				ctx.fillStyle = dataset.fillColor;
 				ctx.closePath();
 				ctx.fill();
@@ -334,13 +340,13 @@
 				//Now draw the points over the line
 				//A little inefficient double looping, but better than the line
 				//lagging behind the point positions
-				if (this.options.pointDot) {
+				if (self.options.pointDot) {
 					helpers.each(dataset.points,function(point){
 						point.draw();
 					});
 				}
 
-			},this);
+			},self);
 		}
 	});
 

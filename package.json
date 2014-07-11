@@ -8,11 +8,11 @@
     "type": "git",
     "url": "https://github.com/bendxn/Chart.StackedArea.js.git"
   },
-  "dependences": {
-    "Chart.js": ">= 1.0.1-beta"
-  },
   "devDependencies": {
     "gulp": "~3.8.6",
     "gulp-concat": "~2.3.3"
+  },
+  "dependencies": {
+    "chart.js": "~1.0.1-beta.2"
   }
 }

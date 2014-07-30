@@ -328,7 +328,8 @@
 						ctx.moveTo(point.x,point.y);
 					}
 				},self);
-				ctx.stroke();
+				if (self.options.datasetStroke)
+					ctx.stroke();
 
 				//Round off the line by going to the base of the chart, back to the start, then fill.
 				ctx.lineTo(dataset.points[dataset.points.length-1].x, self.scale.endPoint);

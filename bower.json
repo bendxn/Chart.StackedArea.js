@@ -20,5 +20,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "chartjs": "~1.0.0"
+  }
 }

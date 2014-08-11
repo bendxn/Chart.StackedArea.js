@@ -1,17 +1,24 @@
 {
   "name": "Chart.StackedArea.js",
-  "version": "1.0.1-beta",
-  "description": "StackedArea implementation for Chart.js",
+  "version": "1.0.0",
   "homepage": "https://github.com/bendxn/Chart.StackedArea.js",
-  "author": "bendxn",
+  "authors": [
+    "Ben Dixon <bendxn@gmail.com>"
+  ],
+  "description": "A stacked area implementation for Chart.js",
+  "main": "Chart.StackedArea.js",
+  "keywords": [
+    "chart",
+    "stacked",
+    "area",
+    "chart.js"
+  ],
+  "license": "MIT",
   "ignore": [
-	"node_modules/*",
-	"bower_components/*"
-  ],
-  "main": [
-    "Chart.StackedArea.js"
-  ],
-  "dependencies": {
-    "chartjs": "~1.0.0"
-  }
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }

@@ -4,6 +4,10 @@
   "description": "StackedArea implementation for Chart.js",
   "homepage": "https://github.com/bendxn/Chart.StackedArea.js",
   "author": "bendxn",
+  "ignore": [
+	"node_modules/*",
+	"bower_components/*"
+  ],
   "main": [
     "Chart.StackedArea.js"
   ],

@@ -3,16 +3,13 @@
   "homepage": "http://www.chartjs.org",
   "description": "StackedArea implementation for Chart.js",
   "private": true,
-  "version": "1.0.1-beta",
+  "version": "1.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/bendxn/Chart.StackedArea.js.git"
   },
-  "devDependencies": {
-    "gulp": "~3.8.6",
-    "gulp-concat": "~2.3.3"
-  },
+  "main": "src/Chart.StackedArea.js",
   "dependencies": {
-    "chart.js": "~1.0.1-beta.2"
+    "chart.js": "^1.0.2"
   }
 }
